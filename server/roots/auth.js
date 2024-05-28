@@ -1,7 +1,12 @@
 const router = require('express').Router()
 const bycrypt = require('bcrypt')
-
+const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const dotenv = require('dotenv')
+
+dotenv.config()
+
+const SECRET_KEY = process.env.SECRET_KEY
 
 // register user
 router.post("/register",async(req, res)=>{
@@ -22,7 +27,6 @@ router.post("/register",async(req, res)=>{
         const user = await newUser.save()
         // response
         res.status(200).json(user)
-        res.send('okey dokey')
     } catch (error) {
         console.log(error);
         res.status(500)
@@ -47,7 +51,9 @@ router.post('/login', async(req, res) => {
             return res.status(401).json({ message: 'Wrong password' });
         }
     
-        res.status(200).json(user)
+        const token = jwt.sign({user:user},SECRET_KEY,{expiresIn:'1hr'})
+
+        res.status(200).json(token)
     } catch (error) {
         res.status(500)
         res.send('failed' + error)

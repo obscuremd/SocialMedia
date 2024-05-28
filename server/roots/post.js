@@ -82,21 +82,6 @@ router.put('/:id/likes', async(req, res)=>{
         res.status(400).json(error)
     }
 })
-// unlike post
-// router.put('/:id/dislike', async(req, res)=>{
-//     try {
-//         const post = await Post.findById(req.params.id)
-
-//         if (post.likes.includes(req.body.userId)) {
-//             await post.updateOne({$pull: {likes: req.body.userId}})
-//             res.status(200).json('like removed')
-//         } else {
-//             res.status(404).json('like not found')
-//         }
-//     } catch (error) {
-//         res.status(404).json(error)
-//     }
-// })
 
 // get a post
 router.get('/:id', async(req, res)=>{

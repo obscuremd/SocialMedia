@@ -6,7 +6,7 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 export default defineConfig({
   server:{
     proxy:{
-      "/api":"http://localhost:8800"}
+      "/api":"https://socialmedia-biwk.onrender.com"}
   },
   plugins: [
     react(),

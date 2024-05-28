@@ -4,6 +4,7 @@ import { Users } from '../../assets/Data'
 import { useRecoilValue } from 'recoil'
 import { UserState } from '../../state/atoms/UserState'
 import axios from 'axios'
+import { motion } from 'framer-motion'
 
 const Hero = ({userPosts, setUserPosts, setFetchPosts, setLoading}) => {
 
@@ -57,23 +58,25 @@ const Hero = ({userPosts, setUserPosts, setFetchPosts, setLoading}) => {
         { id: 2, label: "Nearby" , func:nearby}
     ];
     return(
-        <div className="flex flex-col md:gap-12 gap-6">
+        <div className="flex flex-col md:gap-12 gap-6 w-full">
             {/* text */}
             <div>
-                <p style={{fontSize:Shared.Text.xl, fontWeight:'bold', textTransform:'capitalize'}}>Hello {user.username} 😃</p>
-                <p style={{fontSize:Shared.Text.large, fontWeight:'400'}}>what’s the tea ?</p>
+                <motion.p initial={{scale:0.5, opacity:0}} animate={{scale:1, opacity:1, transition:{delay:0.1}}} style={{fontSize:Shared.Text.xl, fontWeight:'bold', textTransform:'capitalize'}}>Hello {user.username} 😃</motion.p>
+                <motion.p initial={{scale:0.5, opacity:0}} animate={{scale:1, opacity:1, transition:{delay:0.2}}} style={{fontSize:Shared.Text.large, fontWeight:'400'}}>what’s the tea ?</motion.p>
             </div>
 
             {/* search */}
             <div className="flex items-center gap-2 md:gap-4">
-                <img src={Users[0].profilePicture} alt="" className="md:w-12 w-7 md:h-12 h-7 rounded-full object-cover"/>
-                <input type="text" placeholder="Find The Tea" style={{fontSize:Shared.Text.small}} className="p-3 w-full rounded-full bg-[#292B3B] border-[1px] border-[#62668980] outline-none focus:border-[#797da9]" />
+                <motion.img initial={{scale:0.5, opacity:0}} animate={{scale:1, opacity:1, transition:{delay:0.3}}} src={Users[0].profilePicture} alt="" className="md:w-12 w-7 md:h-12 h-7 rounded-full object-cover"/>
+                <motion.input initial={{x:'50%', opacity:0}} animate={{x:0, opacity:1, transition:{delay:0.4}}} whileFocus={{borderColor:'#797da9'}} type="text" placeholder="Find The Tea" style={{fontSize:Shared.Text.small}} className="p-3 w-full rounded-full bg-[#292B3B] border-[1px] border-[#62668980] outline-none" />
             </div>
 
             {/* options */}
-            <div className="inline-flex md:p-2 p-1 bg-[#292B3B] border-[1px] gap-4 border-[#62668980] rounded-2xl">
+            <motion.div initial={{x:'50%', opacity:0}} animate={{x:0, opacity:1, transition:{delay:0.5}}} className="w-fit md:p-2 p-1 bg-[#292B3B] border-[1px] gap-4 border-[#62668980] rounded-2xl">
             {feedTypes.map(({ id, label,func }) => (
-                <button
+                <motion.button
+                    initial={{scale:0.5, opacity:0}}
+                    animate={{scale:1, opacity:1}}
                     key={id}
                     onClick={func}
                     style={{
@@ -84,9 +87,9 @@ const Hero = ({userPosts, setUserPosts, setFetchPosts, setLoading}) => {
                         className="md:px-12 md:py-2 px-2 py-1 border-[#626689] rounded-xl font-bold"
                     >
                         {label}
-                </button>
+                </motion.button>
             ))}
-            </div>
+            </motion.div>
         </div>
     )
 }
