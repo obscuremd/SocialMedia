@@ -1,13 +1,14 @@
 import splash from '../../assets/splash.svg'
-import { gradientTextStyle, Shared, ToasterStyle } from '../../assets/Shared'
+import { gradient, gradientTextStyle, Shared, ToasterStyle } from '../../assets/Shared'
 import { useState } from 'react';
 import { EyeClosed, EyeSolid } from 'iconoir-react';
 import axios from 'axios';
-import { useRecoilState} from 'recoil';
-import { ActiveUserState, UserState } from '../../state/atoms/UserState';
 import toast, { Toaster } from 'react-hot-toast';
 import { motion } from "framer-motion"
 import { dotStream } from 'ldrs'
+import { useRecoilState } from 'recoil';
+import { UserState } from '../../state/atoms/UserState';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -16,10 +17,9 @@ const Login = ({setActive}) => {
 
   dotStream.register()
 
-  const [loading, setLoading] = useState(false)
+  
 
-  const [user, setUser] = useRecoilState(UserState)
-  const [activeUser, setActiveUser] = useRecoilState(ActiveUserState)
+  const [loading, setLoading] = useState(false)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [focus, setFocus] = useState(false)
@@ -38,8 +38,8 @@ const Login = ({setActive}) => {
         toast.success('Logged in')
         // wait after 2 seconds
         setTimeout(() => {
-          setUser(res.data);
-          setActiveUser(true);
+          window.localStorage.setItem('token', res.data)
+          window.location.reload()
         }, 2000);
       }
       
@@ -133,7 +133,7 @@ const Login = ({setActive}) => {
           whileHover={{scale:1.1, boxShadow:'0 0 10px rgba(74, 83, 169, 0.25)',}}
           onClick={login}
             style={{
-              background: 'linear-gradient(129deg, #D64975 -54.57%, #152046 94.11%)',
+              background: gradient,
               fontSize: Shared.Text.large,
               borderWidth:1
             }}

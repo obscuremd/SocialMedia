@@ -3,7 +3,7 @@ import Login from './Login'
 import Register from './Register'
 
 const Auth = () => {
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(1)
   return (
     <div>
         {active === 0 && <Register setActive={setActive}/> }

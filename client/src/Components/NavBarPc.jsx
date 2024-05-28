@@ -1,6 +1,6 @@
-import { ChatLines, ForwardMessage, HelpCircle, HomeSimple} from 'iconoir-react'
+import { ChatLines, ForwardMessage, HelpCircle, HomeSimple, Plus} from 'iconoir-react'
 import { useState } from 'react'
-import { Shared } from '../assets/Shared'
+import { gradient, Shared } from '../assets/Shared'
 import { Users } from '../assets/Data'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
@@ -23,7 +23,7 @@ const NavBarPc = () => {
                             background:active === state ? '#62668980' : 'transparent',
                             borderColor:'#626689',
                             borderWidth:active === state ? 1 : 0}} 
-                    className='flex gap-8 p-4 w-[270px] rounded-2xl capitalize'>
+                    className='flex gap-8 p-3 w-[270px] rounded-2xl capitalize'>
                         {icon}{name}
                 </button>
             </Link>
@@ -53,13 +53,16 @@ const NavBarPc = () => {
                     background: '#292B3B',
                     borderColor:'#626689',
                     borderWidth: 1}} 
-            className='flex gap-8 p-4 w-full rounded-2xl capitalize items-center'>
-                    <img src={add} className='w-9'/>Create Post
+            className='flex gap-8 p-2 w-full rounded-2xl capitalize items-center'>
+                    <div className='p-2 rounded-xl' style={{background: gradient}}>
+                        <Plus/>
+                    </div>
+                    Create Post
             </button>
         {/*others */}
         <div className='p-5 flex flex-col gap-8 bg-[#292B3B] rounded-3xl'>
             <Button icon={<ForwardMessage/>} state={2} name={'Feedback'}/>
-            <Button icon={<HelpCircle/>} state={3} name={'help & support'}/>
+            <Button icon={<HelpCircle/>} state={3} name={'settings'}/>
             <Button icon={<img src={Users[0].profilePicture} className='w-9 h-9 rounded-full object-cover'/>} state={5} name={'profile'} link={'/profile'}/>
         </div>
     </div>

@@ -1,5 +1,5 @@
 import splash from '../../assets/splash.svg'
-import { gradientTextStyle, Shared, ToasterStyle } from '../../assets/Shared'
+import { gradient, gradientTextStyle, Shared, ToasterStyle } from '../../assets/Shared'
 import { useState } from 'react';
 import { EyeClosed, EyeSolid } from 'iconoir-react';
 import axios from 'axios';
@@ -41,8 +41,7 @@ dotStream.register()
         toast.success('Logged in')
         // wait after 2 seconds
         setTimeout(() => {
-          setUser(res.data);
-          setActiveUser(true);
+          setActive(1)
         }, 2000);
       }
       
@@ -170,7 +169,7 @@ dotStream.register()
             whileHover={{scale:1.1, boxShadow:'0 0 10px rgba(74, 83, 169, 0.25)',}}
             onClick={register}
             style={{
-              background: 'linear-gradient(129deg, #D64975 -54.57%, #152046 94.11%)',
+              background: gradient,
               fontSize: Shared.Text.large,
               borderWidth:1
             }}

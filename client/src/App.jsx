@@ -3,22 +3,30 @@ import Header from './Components/Header';
 import Auth from './Screens/Auth/Auth';
 import Navigation from './Screens/Navigation';
 import {BrowserRouter} from 'react-router-dom'
-import { ActiveUserState, UserState } from './state/atoms/UserState';
-import { useRecoilValue } from 'recoil';
+import { UserState } from './state/atoms/UserState';
+import { useRecoilState} from 'recoil';
+import { jwtDecode } from "jwt-decode";
+import { useEffect } from 'react';
 
 function App() {
 
-  const user = useRecoilValue(ActiveUserState)
-  
+  const status = window.localStorage.getItem('token');
+
+  const [user, setUser]= useRecoilState(UserState)
+
+  useEffect(()=>{
+    status && setUser(jwtDecode(status).user)
+  },[])
+
+  console.log(user)
 
   return (
     <BrowserRouter>
       <div className='min-w-full bg-[#191A23] text-white md:px-0 px-[17px] '>
           <Header/>
 
-          {user ?<Navigation/>  : <Auth/>}
-          {/* <Navigation/> */}
-          {/* <Auth/> */}
+          {status ?<Navigation/>  : <Auth/>}
+          
       </div>
     </BrowserRouter>
   )

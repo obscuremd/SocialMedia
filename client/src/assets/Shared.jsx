@@ -2,10 +2,10 @@ const isMobile = window.innerWidth < 768
 
 export const Shared = {
     Text:{
-        xxl: isMobile ?19.998: 52.361 ,
-        xl: isMobile ? 12.361 : 32.36,
-        large: isMobile ? 10 : 20,
-        small: isMobile ? 8: 12.36,
+        xxl: isMobile ?'1.2rem': '2.2rem',
+        xl: isMobile ? '1rem' : '2rem',
+        large: isMobile ? '0.7rem' : '1.2rem',
+        small: isMobile ? '0.6rem': '0.8rem',
     }
 }
 
@@ -19,3 +19,5 @@ export const gradientTextStyle = {
     WebkitBackgroundClip: 'text', // For Safari/Chrome
     color: 'transparent'
 };
+
+export const gradient = 'linear-gradient(129deg, #D64975 -54.57%, #152046 94.11%)'

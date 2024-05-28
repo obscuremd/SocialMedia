@@ -1,5 +1,5 @@
 import{ useEffect, useState } from 'react'
-import { Shared } from '../../assets/Shared'
+import { gradient, Shared } from '../../assets/Shared'
 import { Users } from '../../assets/Data'
 import { useRecoilValue } from 'recoil'
 import { UserState } from '../../state/atoms/UserState'
@@ -80,11 +80,11 @@ const Hero = ({userPosts, setUserPosts, setFetchPosts, setLoading}) => {
                     key={id}
                     onClick={func}
                     style={{
-                            background: feed === id && 'linear-gradient(129deg, #D64975 -54.57%, #152046 94.11%)',
+                            background: feed === id && gradient,
                             fontSize: Shared.Text.large,
                             borderWidth: feed === id ? 1 : 0
                         }}
-                        className="md:px-12 md:py-2 px-2 py-1 border-[#626689] rounded-xl font-bold"
+                        className="md:px-12 md:py-2 px-3 py-1 border-[#626689] rounded-xl font-bold"
                     >
                         {label}
                 </motion.button>

@@ -14,9 +14,10 @@ router.get('/', async(req, res)=>{
 
 // create a post
 router.post('/:id',async(req, res)=>{
-    const newPost = Post(req.body)
+    const UserId = req.params.id
+    const {image, desc} = (req.body)
     try {
-        const savedPost = await newPost.save()
+        const savedPost = await Post.create({userId:UserId, image:image, desc:desc})
         res.status(200).json(savedPost)
     } catch (error) {
         res.status(500).json(error)
