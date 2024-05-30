@@ -40,34 +40,67 @@ const Post = ({profilePicture, username, like, photo, desc, comment, date, posts
 
     const followUser =async()=>{
         // console.log(user.following)
-        try {
-            await axios.put(`/api/users/${posts.userId}/follow`,{userId:user._id})
-            toast.success(`${users.username} followed`)
-            fetchPosts()
-        } catch (error) {
-            if(error.response.status === 403){
-                toast.error(`you already follow ${users.username}`)
-            }
-            else{
-                toast.error('error')
-                console.log(error)
+        if(user._id === posts.userId){
+            toast.error("you can't follow yourself")
+        }else{
+            try {
+                await axios.put(`/api/users/${user._id}/follow`,{userId: posts.userId})
+                toast.success(`${users.username} followed`)
+                fetchPosts()
+            } catch (error) {
+                if(error.response.status === 403){
+                    toast.error(`you already follow ${users.username}`)
+                }
+                else{
+                    toast.error('error')
+                    console.log(error)
+                }
             }
         }
         
     }
 
     const UnFollowUser=async()=>{
-        try {
-            await axios.put(`/api/users/${posts.userId}/unfollow`,{userId:user._id})
-            toast.success(`${users.username} followed`)
-            fetchPosts()
-        } catch (error) {
-            if(error.response.status === 403){
-                toast.error(`you don't follow ${users.username}`)
+        if(user._id === posts.userId){
+            toast.error("you can't unfollow yourself")
+        }else{
+            try {
+                await axios.put(`/api/users/${user._id}/unfollow`,{userId: posts.userId})
+                toast.success(`${users.username} unfollowed`)
+                fetchPosts()
+            } catch (error) {
+                if(error.response.status === 403){
+                    toast.error(`you don't follow ${users.username}`)
+                }
+                else{
+                    toast.error('error')
+                    console.log(error)
+                }
             }
-            else{
+        }
+    }
+
+    const handleLike = async () => {
+        try {
+            await axios.put(`/api/posts/${posts._id}/likes`, { userId: user._id });
+            fetchPosts();
+            setIsLiked(prevIsLiked => !prevIsLiked);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+ 
+    const DeletePost =async()=>{
+        if(user._id !== posts.userId){
+            toast.error("you can only delete your Posts")
+        }else{
+            try {
+                await axios.delete(`/api/posts/${posts._id}`,{ userId: user._id });
+                toast.success("Post")
+                fetchPosts()
+            } catch (error) {
                 toast.error('error')
-                console.log(error)
+                console.log(error);
             }
         }
     }
@@ -80,18 +113,9 @@ const Post = ({profilePicture, username, like, photo, desc, comment, date, posts
             className="flex gap-4 p-2 border-[1px] border-transparent rounded-lg"> {icon} {text}</motion.button> 
     )
 
-    const handleLike = async () => {
-        try {
-            await axios.put(`/api/posts/${posts._id}/likes`, { userId: user._id });
-            fetchPosts();
-            setIsLiked(prevIsLiked => !prevIsLiked);
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
   return (
-    <div className="w-full border-[1px] border-[#62668980] rounded-[13px] px-5 py-3" style={{background:'#292B3B'}}>
+    <div className="w-full min-w-[55vw] border-[1px] border-[#62668980] rounded-[13px] px-5 py-3" style={{background:'#292B3B'}}>
         <Toaster toastOptions={{style:ToasterStyle}}/>
         {/* Profile and likes */}
         <div className="flex justify-between">
@@ -119,14 +143,14 @@ const Post = ({profilePicture, username, like, photo, desc, comment, date, posts
                     className="absolute top-5 bg-[#454862c9] border-[1px] border-[#626689] p-5 backdrop-blur-lg flex flex-col gap-2 rounded-xl" 
                     style={{fontSize:Shared.Text.small}}>
                     
-                    { user.following.includes(posts.userId)
-                        ?<MenuButton icon={<UserXmark/>} text={'Unfollow'} func={UnFollowUser} extra={{color:'#e36db0'}}/>
-                        :<MenuButton icon={<UserPlus/>} text={'Follow'} func={followUser}/>
-                    }
+                    <MenuButton icon={<UserPlus/>} text={'Follow'} func={followUser}/>
                         
                     <MenuButton icon={<Bookmark/>} text={'Save'} func={UnFollowUser}/>
                     <MenuButton icon={<ShareAndroid/>} text={'Share'} func={followUser}/>
-                    <MenuButton icon={<Bin/>} text={'Delete'} func={followUser} extra={{color:'#e36db0'}}/>
+                    <MenuButton icon={<UserXmark/>} text={'Unfollow'} func={UnFollowUser} extra={{color:'#e36db0'}}/>
+                    {user._id === posts.userId &&
+                        <MenuButton icon={<Bin/>} text={'Delete'} func={DeletePost} extra={{color:'#e36db0'}}/>
+                    }
                 </motion.div>}
 
                 <button onClick={handleLike} className="flex items-center py-1 px-2 rounded-2xl bg-[#FFFFFF1A] gap-1" style={{fontSize:Shared.Text.small}}>

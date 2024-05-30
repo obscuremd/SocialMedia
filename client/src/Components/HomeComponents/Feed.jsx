@@ -20,7 +20,7 @@ jellyTriangle.register()
         <Hero setUserPosts={setUserPosts} userPosts={userPosts} setFetchPosts={setFetchPosts} setLoading={setLoading}/>
 
         {loading 
-        ?<div className="w-full flex justify-center md:py-10 py-[30vh]">
+        ?<div className="w-full flex justify-center md:py-10 md:px-[25vw] py-[30vh]">
             <l-jelly-triangle size={isMobile?"30":"40"} speed="1.8" color="#572E56"/>
         </div>  
         

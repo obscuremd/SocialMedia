@@ -16,13 +16,16 @@ function App() {
   const [user, setUser]= useRecoilState(UserState)
 
   useEffect(()=>{
-    fetchUser()
+    status && fetchUser()
   },[])
 
   const fetchUser =async()=>{
-    const req = await axios.get(`/api/users/?username=${jwtDecode(status).user.username}`)
-    console.log(req.data)
-    setUser(req.data)
+    try {
+      const req = await axios.get(`/api/users/?username=${jwtDecode(status).user.username}`)
+      setUser(req.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 

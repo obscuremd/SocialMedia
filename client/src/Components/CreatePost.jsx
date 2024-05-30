@@ -9,12 +9,19 @@ import {motion} from 'framer-motion'
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import { UserState } from '../state/atoms/UserState';
+import { hourglass } from 'ldrs'
+
 
 const CreatePost = () => {
+
+
+hourglass.register()
+
   
   const [image, setImage]=useState(null)
   const [desc, setDesc] = useState(null)
   const [imageUrl, setImageUrl]=useState(null)
+  const [imageUploading, setImageUploading] = useState(false)
   
 
   const storage = getStorage()
@@ -23,36 +30,29 @@ const CreatePost = () => {
 
   const user = useRecoilValue(UserState)
 
-  const createPost =async()=>{
-
+  const ImageChange=async(e)=>{
+    setImage(e.target.files[0])
     const imageRef = ref(storage, `socialMedia/posts/${image.name}`)
 
     image == null && toast.error("Please provide a valid image")
-
     try {
       const upload = await uploadBytes(imageRef, image)
       const url = await getDownloadURL(upload.ref)
-      setImageUrl(url)
       console.log(imageUrl);
-      if(!imageUrl){
-        toast.error('image loading')
-      }
-      else if(desc === null){
-        toast.error('please put a description')
-      }
-      else{
-        try {
-          const req = await axios.post(`/api/posts/${user._id}`,{image:imageUrl, desc:desc})
-          console.log(req)
-        } catch (error) {
-          toast.error('error')
-        }
-      }
+      setImageUrl(url)
     } catch (error) {
       toast.error('error')
       console.log(error);
     }
-    
+  }
+
+  const createPost =async()=>{
+    try {
+      const req = await axios.post(`/api/posts/${user._id}`,{image:imageUrl, desc:desc})
+      console.log(req)
+    } catch (error) {
+      toast.error('error')
+    }
   }
 
   return (
@@ -73,7 +73,7 @@ const CreatePost = () => {
                 style={{fontSize:Shared.Text.small, fontWeight:'700'}} className='flex gap-1 cursor-pointer items-center'>
                   <img style={{width:Shared.Text.large}} src={addImage} alt="" />Add A Picture ?
               </label>
-              <input type="file" id='fileInput' accept='image' placeholder='Add A Picture ?' style={{display:'none'}} onChange={(e)=>setImage(e.target.files[0])}/>
+              <input type="file" id='fileInput' accept='image' placeholder='Add A Picture ?' style={{display:'none'}} onChange={ImageChange}/>
             </div>
           </div>
           : // FILLED IMAGE
@@ -81,7 +81,13 @@ const CreatePost = () => {
             <button onClick={()=>setImage(null)} className=''>
               <Xmark/>
             </button>
-            <img src={URL.createObjectURL(image)} className="w-full h-full border-2 border-[#62668980] rounded-3xl flex justify-center items-center object-contain"/>
+            <div className='md:w-[637.473px] w-72 h-[50vh] relative'>
+              {imageUploading &&
+                <div className="absolute md:w-[637.473px] w-72 h-[50vh] rounded-3xl bg-[#afafaf46] backdrop-blur-md flex justify-center items-center">
+                <l-hourglass  size="40" bg-opacity="0.1" speed="1.75" color="#292B3B"/>
+              </div>}
+              <img src={imageUrl} className="w-full h-full border-2 border-[#62668980] rounded-3xl flex justify-center items-center object-contain"/>
+            </div>
           </div>
         }
         

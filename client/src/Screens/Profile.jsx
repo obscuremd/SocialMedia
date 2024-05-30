@@ -7,7 +7,7 @@ const Profile = ({isMobile}) => {
   
     
   return (
-    <div className={isMobile? 'ml-0':'mr-[4%] flex flex-col'}>
+    <div className={isMobile? 'ml-0':'mr-[4%] w-full flex flex-col'}>
       <Hero/>
       <ProfileFeed isMobile={isMobile}/>
     </div>
