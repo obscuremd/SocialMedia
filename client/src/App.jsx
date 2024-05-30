@@ -7,6 +7,7 @@ import { UserState } from './state/atoms/UserState';
 import { useRecoilState} from 'recoil';
 import { jwtDecode } from "jwt-decode";
 import { useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
 
@@ -15,10 +16,15 @@ function App() {
   const [user, setUser]= useRecoilState(UserState)
 
   useEffect(()=>{
-    status && setUser(jwtDecode(status).user)
+    fetchUser()
   },[])
 
-  console.log(user)
+  const fetchUser =async()=>{
+    const req = await axios.get(`/api/users/?username=${jwtDecode(status).user.username}`)
+    console.log(req.data)
+    setUser(req.data)
+  }
+
 
   return (
     <BrowserRouter>

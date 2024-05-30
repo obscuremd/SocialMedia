@@ -1,5 +1,5 @@
 import{ useEffect, useState } from 'react'
-import { gradient, Shared } from '../../assets/Shared'
+import { gradient, isMobile, Shared } from '../../assets/Shared'
 import { Users } from '../../assets/Data'
 import { useRecoilValue } from 'recoil'
 import { UserState } from '../../state/atoms/UserState'
@@ -22,7 +22,8 @@ const Hero = ({userPosts, setUserPosts, setFetchPosts, setLoading}) => {
     
     const following = async() =>{
         setFeed(1)
-        const res = await axios.get(`/api/timeline/${user._id}`);
+        // const res = await axios.get(`/api/timeline/${user._id}`);
+        const res = await axios.get('/api/posts/');
         setUserPosts(res.data.sort((p1,p2)=>{
             return new Date(p2.createdAt) - new Date(p1.createdAt)
         })); // Update state with fetched posts
@@ -72,19 +73,17 @@ const Hero = ({userPosts, setUserPosts, setFetchPosts, setLoading}) => {
             </div>
 
             {/* options */}
-            <motion.div initial={{x:'50%', opacity:0}} animate={{x:0, opacity:1, transition:{delay:0.5}}} className="w-fit md:p-2 p-1 bg-[#292B3B] border-[1px] gap-4 border-[#62668980] rounded-2xl">
+            <motion.div initial={{x:'50%', opacity:0}} animate={{x:0, opacity:1, transition:{delay:0.5}}} className="w-fit md:p-2 px-[5px] py-1 bg-[#292B3B] border-[1px] flex gap-4 border-[#62668980] md:rounded-2xl rounded-xl">
             {feedTypes.map(({ id, label,func }) => (
                 <motion.button
-                    initial={{scale:0.5, opacity:0}}
-                    animate={{scale:1, opacity:1}}
                     key={id}
                     onClick={func}
                     style={{
                             background: feed === id && gradient,
-                            fontSize: Shared.Text.large,
+                            fontSize: isMobile? '0.6rem':'1.2rem',
                             borderWidth: feed === id ? 1 : 0
                         }}
-                        className="md:px-12 md:py-2 px-3 py-1 border-[#626689] rounded-xl font-bold"
+                        className="md:px-12 md:py-2 px-3 py-1 border-[#626689] md:rounded-xl rounded-lg font-bold"
                     >
                         {label}
                 </motion.button>

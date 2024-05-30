@@ -1,6 +1,6 @@
-import { Clock, Heart, HeartSolid, MapPin, MessageText, MoreHoriz } from "iconoir-react"
+import { Bin, Bookmark, Clock, Heart, HeartSolid, MapPin, MessageText, MoreHoriz, ShareAndroid, UserPlus, UserXmark } from "iconoir-react"
 import { Posts, Users } from "../assets/Data"
-import { Shared } from "../assets/Shared"
+import { Shared, ToasterStyle } from "../assets/Shared"
 import { useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { CommentState } from "../state/atoms/CommentState"
@@ -8,11 +8,14 @@ import axios from "axios"
 import { Link } from "react-router-dom"
 import empty from '../assets/empty profile.svg'
 import { UserState } from "../state/atoms/UserState"
+import { motion } from "framer-motion"
+import toast, {Toaster} from 'react-hot-toast'
 
 
 const Post = ({profilePicture, username, like, photo, desc, comment, date, postsDetails, fetchPosts}) => {
 
     const user = useRecoilValue(UserState)
+    const [activeMenu, setActiveMenu] = useState(false)
     const [isCommentVisible, setCommentVisible] =useRecoilState(CommentState)
     const photos = photo
     const isMobile = window.innerWidth < 768
@@ -35,6 +38,48 @@ const Post = ({profilePicture, username, like, photo, desc, comment, date, posts
         fetchUsers()
     },[])
 
+    const followUser =async()=>{
+        // console.log(user.following)
+        try {
+            await axios.put(`/api/users/${posts.userId}/follow`,{userId:user._id})
+            toast.success(`${users.username} followed`)
+            fetchPosts()
+        } catch (error) {
+            if(error.response.status === 403){
+                toast.error(`you already follow ${users.username}`)
+            }
+            else{
+                toast.error('error')
+                console.log(error)
+            }
+        }
+        
+    }
+
+    const UnFollowUser=async()=>{
+        try {
+            await axios.put(`/api/users/${posts.userId}/unfollow`,{userId:user._id})
+            toast.success(`${users.username} followed`)
+            fetchPosts()
+        } catch (error) {
+            if(error.response.status === 403){
+                toast.error(`you don't follow ${users.username}`)
+            }
+            else{
+                toast.error('error')
+                console.log(error)
+            }
+        }
+    }
+
+    const MenuButton =({icon, text, func, extra})=>(
+        <motion.button 
+            onClick={func} 
+            whileHover={{backgroundColor:'#62668980', borderColor:'#626689'}} 
+            style={extra}
+            className="flex gap-4 p-2 border-[1px] border-transparent rounded-lg"> {icon} {text}</motion.button> 
+    )
+
     const handleLike = async () => {
         try {
             await axios.put(`/api/posts/${posts._id}/likes`, { userId: user._id });
@@ -47,7 +92,7 @@ const Post = ({profilePicture, username, like, photo, desc, comment, date, posts
 
   return (
     <div className="w-full border-[1px] border-[#62668980] rounded-[13px] px-5 py-3" style={{background:'#292B3B'}}>
-        
+        <Toaster toastOptions={{style:ToasterStyle}}/>
         {/* Profile and likes */}
         <div className="flex justify-between">
             {/* profile */}
@@ -62,8 +107,28 @@ const Post = ({profilePicture, username, like, photo, desc, comment, date, posts
             </Link>
             
             {/* likes and more */}
-            <div className="flex flex-col items-end">
-                <MoreHoriz/>
+            <div className="relative flex flex-col items-end">
+                <button onClick={()=>setActiveMenu(!activeMenu)}>
+                    <MoreHoriz/>
+                </button>
+
+                {activeMenu && 
+                <motion.div 
+                    initial={{y:'-50%', opacity:0}} 
+                    animate={{y:0, opacity:1}} 
+                    className="absolute top-5 bg-[#454862c9] border-[1px] border-[#626689] p-5 backdrop-blur-lg flex flex-col gap-2 rounded-xl" 
+                    style={{fontSize:Shared.Text.small}}>
+                    
+                    { user.following.includes(posts.userId)
+                        ?<MenuButton icon={<UserXmark/>} text={'Unfollow'} func={UnFollowUser} extra={{color:'#e36db0'}}/>
+                        :<MenuButton icon={<UserPlus/>} text={'Follow'} func={followUser}/>
+                    }
+                        
+                    <MenuButton icon={<Bookmark/>} text={'Save'} func={UnFollowUser}/>
+                    <MenuButton icon={<ShareAndroid/>} text={'Share'} func={followUser}/>
+                    <MenuButton icon={<Bin/>} text={'Delete'} func={followUser} extra={{color:'#e36db0'}}/>
+                </motion.div>}
+
                 <button onClick={handleLike} className="flex items-center py-1 px-2 rounded-2xl bg-[#FFFFFF1A] gap-1" style={{fontSize:Shared.Text.small}}>
                     {isLiked ? <HeartSolid color="#D64975"/> : <Heart/>}
                     <p>{like}</p>

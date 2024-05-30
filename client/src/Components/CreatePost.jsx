@@ -2,21 +2,26 @@ import { useState } from 'react'
 import addImage from '../assets/Vector.svg'
 import { Xmark } from 'iconoir-react';
 import { Shared, ToasterStyle } from '../assets/Shared';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { CreatePostState } from '../state/atoms/CreatePostState';
 import {motion} from 'framer-motion'
 import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import { UserState } from '../state/atoms/UserState';
 
 const CreatePost = () => {
   
   const [image, setImage]=useState(null)
+  const [desc, setDesc] = useState(null)
   const [imageUrl, setImageUrl]=useState(null)
   
 
   const storage = getStorage()
 
   const [isCreatePostVisible, setCreatePostVisible] = useRecoilState(CreatePostState)
+
+  const user = useRecoilValue(UserState)
 
   const createPost =async()=>{
 
@@ -29,6 +34,20 @@ const CreatePost = () => {
       const url = await getDownloadURL(upload.ref)
       setImageUrl(url)
       console.log(imageUrl);
+      if(!imageUrl){
+        toast.error('image loading')
+      }
+      else if(desc === null){
+        toast.error('please put a description')
+      }
+      else{
+        try {
+          const req = await axios.post(`/api/posts/${user._id}`,{image:imageUrl, desc:desc})
+          console.log(req)
+        } catch (error) {
+          toast.error('error')
+        }
+      }
     } catch (error) {
       toast.error('error')
       console.log(error);
@@ -42,7 +61,7 @@ const CreatePost = () => {
       className="fixed md:top-16 top-0 w-full h-screen bg-[#2020209d] backdrop-filter backdrop-blur-sm flex justify-center items-center pr-[5%] md:pr-0">
         <Toaster toastOptions={{style:ToasterStyle}}/>
       {/* inner blue container */}
-      <div className="bg-[#292B3B] rounded-3xl p-6 flex flex-col gap-3">
+      <motion.div className="bg-[#292B3B] rounded-3xl p-6 flex flex-col gap-3">
         <p style={{fontSize:Shared.Text.large, fontWeight:'700'}}>Create Post</p>
         {/* image */}
         {image === null 
@@ -67,7 +86,7 @@ const CreatePost = () => {
         }
         
         {/* input */}
-        <input type='text' placeholder='Got any juicy gossip to spill' style={{fontSize:Shared.Text.small}} className="p-3 w-full rounded-full bg-[#292B3B] border-[1px] border-[#62668980] outline-none focus:border-[#797da9]" />
+        <input type='text' onChange={(e)=>setDesc(e.target.value)} placeholder='Got any juicy gossip to spill' style={{fontSize:Shared.Text.small}} className="p-3 w-full rounded-full bg-[#292B3B] border-[1px] border-[#62668980] outline-none focus:border-[#797da9]" />
 
         {/* buttons */}
         <div className='flex gap-6'>
@@ -84,7 +103,7 @@ const CreatePost = () => {
               Cancel
           </button>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }

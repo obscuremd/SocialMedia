@@ -8,7 +8,6 @@ import { useRecoilState } from 'recoil'
 import { CreatePostState } from '../state/atoms/CreatePostState'
 
 
-const add = 'https://s3-alpha-sig.figma.com/img/c585/d523/8204ee863c8db241bbf753cf32eaf09d?Expires=1713744000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ipuQciyHyxdp7itLOP15f3YRG1HYxgsMgxS~5460fP-I5kkoI8NLxlKrzMPdoyeBOrNoY0aabreqV7KgHboVT5fcsNtKcWd87aRf8mJ-8lXyVmkJxD6aTntxEUT1W7g~i7XCFDD43IuFT7xAIIIJWoZmKv8VAPwqH~8Ic5SrcZjPw7bXSwWwJwrABALr8dZgdjmPjMIHURgnPGOBM9IEB0Bqb8dPuz-gStDjEU6PK~zJULN6QfVEfhYqkVAc-MH~-gABgCIbKJ4OQy8VJu9DcKmHCKopOAlbFhe7rd97ejwmNJxUOwsZ7sBA~JOBnBAQPsOs6qgyJhk2s~fQq-Gh8A__'
 
 
 const NavBarPc = () => {

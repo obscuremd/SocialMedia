@@ -71,20 +71,25 @@ router.get('/',async(req, res)=>{
 })
 // follow user
 router.put('/:id/follow', async(req, res)=>{
+   
+
+    const UserId = req.params.id
+
+    const OtherUserId = req.body.userId
     // checking if the user is yourself
-    if(req.body.userId !== req.params.id){
+    if(UserId !== OtherUserId){
         try {
+            // find yourself
+            const currentUser = await User.findById(UserId)  
             // find other user
-            const user = await User.findById(req.params.id)
-            //   find yourself
-            const currentUser = await User.findById(req.body.userId)  
+            const OtherUser = await User.findById(OtherUserId)
 
-        //   check if your already folowing the user
-        if(!user.followers.includes(req.body.userId)){
-            await user.updateOne({$push:{followers: req.body.userId}})
-            await currentUser.updateOne({$push:{following: req.body.userId}})
+        // check if your already following the user
+        if(!currentUser.following.includes(OtherUserId)){
+            await OtherUser.updateOne({$push:{followers: UserId}})
+            await currentUser.updateOne({$push:{following: OtherUserId}})
 
-            res.status(200).json(currentUser)
+            res.status(200).json("user followed")
         } else{
             res.status(403).json('you already follow this user')
         }
@@ -96,22 +101,27 @@ router.put('/:id/follow', async(req, res)=>{
         res.status(403).json('you cant follow yourself')
     }
 })
-// unFollow user
-router.put('/:id/unFollow', async(req, res)=>{
+// unfollow user
+router.put('/:id/unfollow', async(req, res)=>{
+   
+
+    const UserId = req.params.id
+
+    const OtherUserId = req.body.userId
     // checking if the user is yourself
-    if(req.body.userId !== req.params.id){
+    if(UserId !== OtherUserId){
         try {
+            // find yourself
+            const currentUser = await User.findById(UserId)  
             // find other user
-            const user = await User.findById(req.params.id)
-            //   find yourself
-            const currentUser = await User.findById(req.body.userId)  
+            const OtherUser = await User.findById(OtherUserId)
 
-        //   check if your already folowing the user
-        if(user.followers.includes(req.body.userId)){
-            await user.updateOne({$pull:{followers: req.body.userId}})
-            await currentUser.updateOne({$pull:{following: req.body.userId}})
+        // check if your already following the user
+        if(currentUser.following.includes(OtherUserId)){
+            await OtherUser.updateOne({$pull:{followers: UserId}})
+            await currentUser.updateOne({$pull:{following: OtherUserId}})
 
-            res.status(200).json(currentUser)
+            res.status(200).json("user unfollowed")
         } else{
             res.status(403).json("you don't follow this user")
         }
@@ -120,7 +130,7 @@ router.put('/:id/unFollow', async(req, res)=>{
         }
         // if you're the same you get this error
     }else{
-        res.status(403).json('you cant unFollow yourself')
+        res.status(403).json('you cant unfollow yourself')
     }
 })
 
