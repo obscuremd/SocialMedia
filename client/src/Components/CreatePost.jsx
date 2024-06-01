@@ -12,6 +12,8 @@ import { UserState } from '../state/atoms/UserState';
 import { hourglass } from 'ldrs'
 
 
+
+
 const CreatePost = () => {
 
 
@@ -31,24 +33,31 @@ hourglass.register()
   const user = useRecoilValue(UserState)
 
   const ImageChange=async(e)=>{
-    setImage(e.target.files[0])
-    const imageRef = ref(storage, `socialMedia/posts/${image.name}`)
+    const file = e.target.files[0]
 
-    image == null && toast.error("Please provide a valid image")
+    if(!file){toast.error("Please provide a valid image"); return}
+    // setImage(file)
+    const imageRef = ref(storage, `socialMedia/posts/${file.name}`)
+    setImageUploading(true)
     try {
-      const upload = await uploadBytes(imageRef, image)
+      const upload = await uploadBytes(imageRef, file)
       const url = await getDownloadURL(upload.ref)
-      console.log(imageUrl);
       setImageUrl(url)
+      setImageUploading(false)
     } catch (error) {
       toast.error('error')
       console.log(error);
+      setImageUploading(false)
     }
   }
 
   const createPost =async()=>{
     try {
       const req = await axios.post(`/api/posts/${user._id}`,{image:imageUrl, desc:desc})
+      if(req.status === 200){
+        toast.success('image Upload successful')
+        setTimeout(()=>window.location.reload(),2000)
+      }
       console.log(req)
     } catch (error) {
       toast.error('error')
@@ -64,28 +73,26 @@ hourglass.register()
       <motion.div className="bg-[#292B3B] rounded-3xl p-6 flex flex-col gap-3">
         <p style={{fontSize:Shared.Text.large, fontWeight:'700'}}>Create Post</p>
         {/* image */}
-        {image === null 
+        {imageUrl === null 
         ?// empty image
           <div className="md:w-[637.473px] w-72 md:h-[209.55px] h-24 border-2 border-[#62668980] rounded-3xl flex justify-center items-center">
-            <div className='flex bg-[#82828280] rounded-full md:p-4 p-2 gap-3 '>
+            {imageUploading
+              ?<l-hourglass size="40" bg-opacity="0.1" speed="1.75" color="#FFFFFF"/>
+              :<div className='flex bg-[#82828280] rounded-full md:p-4 p-2 gap-3 '>
               <label 
                 htmlFor="fileInput" 
                 style={{fontSize:Shared.Text.small, fontWeight:'700'}} className='flex gap-1 cursor-pointer items-center'>
                   <img style={{width:Shared.Text.large}} src={addImage} alt="" />Add A Picture ?
               </label>
               <input type="file" id='fileInput' accept='image' placeholder='Add A Picture ?' style={{display:'none'}} onChange={ImageChange}/>
-            </div>
+            </div>}
           </div>
           : // FILLED IMAGE
           <div className='md:w-[637.473px] w-72 h-[50vh] flex flex-col justify-center items-end'>
-            <button onClick={()=>setImage(null)} className=''>
+            <button onClick={()=>setImageUrl(null)} className=''>
               <Xmark/>
             </button>
-            <div className='md:w-[637.473px] w-72 h-[50vh] relative'>
-              {imageUploading &&
-                <div className="absolute md:w-[637.473px] w-72 h-[50vh] rounded-3xl bg-[#afafaf46] backdrop-blur-md flex justify-center items-center">
-                <l-hourglass  size="40" bg-opacity="0.1" speed="1.75" color="#292B3B"/>
-              </div>}
+            <div className='md:w-[637.473px] w-72 h-[50vh]'>
               <img src={imageUrl} className="w-full h-full border-2 border-[#62668980] rounded-3xl flex justify-center items-center object-contain"/>
             </div>
           </div>

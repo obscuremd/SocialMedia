@@ -1,12 +1,11 @@
 import Friends from '../Components/Friends'
-import Post from '../Components/Post'
-import PropTypes from 'prop-types'
 import { FriendsState } from '../state/atoms/FriendsState'
 import { useRecoilValue } from 'recoil'
 import FriendsMobile from '../Components/FriendsMobile'
 import Feed from '../Components/HomeComponents/Feed'
+import { isMobile } from '../assets/Shared'
 
-const Home = ({isMobile}) => {
+const Home = () => {
 
   const friendState = useRecoilValue(FriendsState)
 
@@ -14,18 +13,13 @@ const Home = ({isMobile}) => {
     <div className={isMobile? 'ml-0':' mr-[4%] flex gap-10'}>
           <Feed/>
 
-            {isMobile && friendState ?
-              <FriendsMobile/>:
-              <div className={isMobile && 'hidden'}>
-                <Friends/>
-              </div>
+            {isMobile && friendState 
+              ? <FriendsMobile/>
+              : <Friends/>
             }
     </div>
   )
 }
 
-Home.propTypes = {
-    isMobile: PropTypes.bool
-}
 
 export default Home

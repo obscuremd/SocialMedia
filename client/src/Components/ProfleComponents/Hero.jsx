@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Users } from '../../assets/Data'
 import { Shared } from '../../assets/Shared'
 import { useRecoilValue } from 'recoil'
 import { UserState } from '../../state/atoms/UserState'
@@ -39,8 +38,8 @@ const Hero = () => {
 
           <div className='flex gap-7 p-3'>
             <p style={{fontSize:Shared.Text.large, fontWeight:'700'}}>23 posts</p>
-            <p style={{fontSize:Shared.Text.large, fontWeight:'700'}}>{user.followers.length} followers</p>
-            <p style={{fontSize:Shared.Text.large, fontWeight:'700'}}>{user.following.length} following</p>
+            <p style={{fontSize:Shared.Text.large, fontWeight:'700'}}>{user?.followers?.length || 0} followers</p>
+            <p style={{fontSize:Shared.Text.large, fontWeight:'700'}}>{user?.following?.length || 0} following</p>
           </div>
 
           <div className='flex gap-7'>

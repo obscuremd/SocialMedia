@@ -27,10 +27,10 @@ function Navigation() {
       <div className='min-h-screen bg-[#191A23] text-white min-w-full flex flex-col-reverse md:flex-row gap-[3%]'>
           {isMobile? <NavBarMobile/> : <NavBarPc/>}
           <Routes>
-              <Route path='/' element={<Home isMobile={isMobile}/>}/>
-              <Route path='/profile' element={<Profile isMobile={isMobile}/>}/>
-              <Route path='/Userprofile' element={<OtherUserProfile isMobile={isMobile}/>}/>
-              <Route path='/Userprofile/:username' element={<OtherUserProfile isMobile={isMobile}/>}/>
+              <Route path='/' element={<Home/>}/>
+              <Route path='/profile' element={<Profile/>}/>
+              <Route path='/Userprofile' element={<OtherUserProfile/>}/>
+              <Route path='/Userprofile/:username' element={<OtherUserProfile/>}/>
           </Routes> 
           {isCommentVisible && <Comments/>}
           {isCreatePostVisible && <CreatePost/>}

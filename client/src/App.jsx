@@ -11,20 +11,26 @@ import axios from 'axios';
 
 function App() {
 
-  const status = window.localStorage.getItem('token');
+  const token = window.localStorage.getItem('token');
+
+  // console.log(jwtDecode(token));
 
   const [user, setUser]= useRecoilState(UserState)
 
   useEffect(()=>{
-    status && fetchUser()
-  },[])
+    token && fetchUser()
+  },[token])
 
   const fetchUser =async()=>{
     try {
-      const req = await axios.get(`/api/users/?username=${jwtDecode(status).user.username}`)
+      const req = await axios.get(`/api/users/?username=${jwtDecode(token).user.username}`)
       setUser(req.data)
     } catch (error) {
-      console.log(error)
+      if (error.response && error.response.status === 304) {
+        window.localStorage.removeItem('token');
+        setUser(null);
+        // Redirect to login or show a message
+      }
     }
   }
 
@@ -34,7 +40,7 @@ function App() {
       <div className='min-w-full bg-[#191A23] text-white md:px-0 px-[17px] '>
           <Header/>
 
-          {status ?<Navigation/>  : <Auth/>}
+          {token ?<Navigation/>  : <Auth/>}
           
       </div>
     </BrowserRouter>

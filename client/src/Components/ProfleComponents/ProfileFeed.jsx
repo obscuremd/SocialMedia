@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { Posts, Users } from '../../assets/Data'
 import Post from '../Post'
 import FriendsMobile from '../FriendsMobile'
 import Friends from '../Friends'
@@ -8,8 +7,9 @@ import { FriendsState } from '../../state/atoms/FriendsState'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserState } from '../../state/atoms/UserState';
+import { isMobile } from '../../assets/Shared';
 
-const ProfileFeed = ({isMobile}) => {
+const ProfileFeed = () => {
 
     const [userPosts, setUserPosts]= useState([])
     const friendState = useRecoilValue(FriendsState)
@@ -65,7 +65,7 @@ const ProfileFeed = ({isMobile}) => {
 }
 
 ProfileFeed.propTypes = {
-  isMobile: PropTypes.string
+  isMobile: PropTypes.any
 }
 
 export default ProfileFeed
