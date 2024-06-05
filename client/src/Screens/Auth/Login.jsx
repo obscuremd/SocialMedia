@@ -32,8 +32,8 @@ const Login = ({ setActive }) => {
     setLoading(true)
 
     try {
-      const res = await axios.post("/api/auth/login", { email: email, password: password })
-      // const res = await axios.post("https://socialmedia-biwk.onrender.com/api/auth/login", { email: email, password: password })
+      // const res = await axios.post("/api/auth/login", { email: email, password: password })
+      const res = await axios.post("https://socialmedia-biwk.onrender.com/api/auth/login", { email: email, password: password })
 
       // console.log(res)
       if (res.status === 200) {
