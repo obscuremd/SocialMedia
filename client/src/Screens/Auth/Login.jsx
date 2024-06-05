@@ -57,6 +57,7 @@ const Login = ({setActive}) => {
       }else{
         setTimeout(()=>{
           toast.error('error')
+          console.log(error);
           setLoading(false)
         },2000)
       }
