@@ -35,14 +35,15 @@ const Login = ({ setActive }) => {
       // const res = await axios.post("/api/auth/login", { email: email, password: password })
       const res = await axios.post("https://socialmedia-biwk.onrender.com/api/auth/login", { email: email, password: password })
 
-      if (res.status === 200) {
-        toast.success('Logged in')
-        // wait after 2 seconds
-        setTimeout(() => {
-          window.localStorage.setItem('token', res.data)
-          window.location.reload()
-        }, 2000);
-      }
+      console.log(res)
+      // if (res.status === 200) {
+      //   toast.success('Logged in')
+      //   // wait after 2 seconds
+      //   setTimeout(() => {
+      //     window.localStorage.setItem('token', res.data)
+      //     window.location.reload()
+      //   }, 2000);
+      // }
 
     } catch (error) {
       if (error.response.status === 404) {
