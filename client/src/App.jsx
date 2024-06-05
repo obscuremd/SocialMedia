@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil';
 import { jwtDecode } from "jwt-decode";
 import { useEffect } from 'react';
 import axios from 'axios';
+import { Url } from './assets/Shared';
 
 function App() {
 
@@ -23,7 +24,7 @@ function App() {
 
   const fetchUser = async () => {
     try {
-      const req = await axios.get(`/api/users/?username=${jwtDecode(token).user.username}`)
+      const req = await axios.get(`${Url}/api/users/?username=${jwtDecode(token).user.username}`)
       setUser(req.data)
     } catch (error) {
       if (error.response && error.response.status === 304) {

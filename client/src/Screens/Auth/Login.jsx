@@ -1,5 +1,5 @@
 import splash from '../../assets/splash.svg'
-import { gradient, gradientTextStyle, Shared, ToasterStyle } from '../../assets/Shared'
+import { gradient, gradientTextStyle, Shared, ToasterStyle, Url } from '../../assets/Shared'
 import { useState } from 'react';
 import { EyeClosed, EyeSolid } from 'iconoir-react';
 import axios from 'axios';
@@ -33,7 +33,7 @@ const Login = ({ setActive }) => {
 
     try {
       // const res = await axios.post("/api/auth/login", { email: email, password: password })
-      const res = await axios.post("https://socialmedia-biwk.onrender.com/api/auth/login", { email: email, password: password })
+      const res = await axios.post( `${Url}/api/auth/login`, { email: email, password: password })
 
       // console.log(res)
       if (res.status === 200) {

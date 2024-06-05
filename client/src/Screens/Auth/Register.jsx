@@ -1,5 +1,5 @@
 import splash from '../../assets/splash.svg'
-import { gradient, gradientTextStyle, Shared, ToasterStyle } from '../../assets/Shared'
+import { gradient, gradientTextStyle, Shared, ToasterStyle, Url } from '../../assets/Shared'
 import { useState } from 'react';
 import { EyeClosed, EyeSolid } from 'iconoir-react';
 import axios from 'axios';
@@ -35,7 +35,7 @@ dotStream.register()
     setLoading(true)
 
     try {
-      const res =  await axios.post("/api/auth/register",{username:username,email:email, password:password})
+      const res =  await axios.post(`${Url}/api/auth/register`,{username:username,email:email, password:password})
 
       if(res.status === 200) {
         toast.success('Logged in')
