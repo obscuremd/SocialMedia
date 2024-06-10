@@ -11,8 +11,6 @@ const senderId = import.meta.env.VITE_FIREBASE_SENDERID;
 const appId = import.meta.env.VITE_FIREBASE_APPID;
 const measurementId = import.meta.env.VITE_FIREBASE_MEASUREMENTID;
 
-console.log(key)
-
 const firebaseConfig = {
     apiKey: key,
     authDomain: domain,
